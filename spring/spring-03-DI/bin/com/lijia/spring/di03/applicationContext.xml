@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="mySchool" class="com.lijia.spring.di03.School">
+		<property name="name" value="华东交通大学"></property>
+	</bean>
+	<bean id="mySchool2" class="com.lijia.spring.di03.School">
+		<property name="name" value="华东交大"></property>
+	</bean>
+	
+	<bean id="mySome" class="com.lijia.spring.di03.Some">
+		<property name="schools">
+			<array>
+				<ref bean="mySchool"/> 
+				<ref bean="mySchool2"/> 
+			</array>
+		</property>
+		<property name="myStrs">
+			<array>
+				<value>江西</value>
+				<value>萍乡</value>
+			</array>
+		</property>
+		<property name="myList">
+			<list>
+				<value>湘东</value>
+				<value>老关</value>
+			</list>
+		</property>
+		<property name="mySet">
+			<set>
+				<value>油塘</value>
+				<value>荷塘下</value>
+			</set>
+		</property>
+		<!-- 其键值可以是任意类型 -->
+		<property name="myMap">
+			<map>
+				<entry key="1号" value="李嘉1"/>
+				<entry key="2号" value="李嘉2"/>
+			</map>
+		</property>
+		<!-- 其键值只能是字符串类型 -->
+		<property name="myPros">
+			<props>
+				<prop key="tel">110</prop>
+				<prop key="name">公安局</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

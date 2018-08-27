@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lijia.dao.MinisterDao">
+  
+  <!-- Minister selectMinisterById(int mid); -->
+  <!--  
+  <resultMap type="com.lijia.beans.Minister" id="ministerMapper">
+  	<id column="mid" property="mid"/>
+  	<result column="mname" property="mname"/>
+  	<association property="country" javaType="com.lijia.beans.Country">
+  		<id column="cid" property="cid"/>
+  		<result column="cname" property="cname"/>
+  	</association>
+  </resultMap>
+  
+  <select id="selectMinisterById" resultMap="ministerMapper">
+  	select mid,mname,cid,cname
+  	from minister,country
+  	where countryId = cid and mid=#{xxx}
+  </select>
+  -->
+  <!-- 分步查询 -->
+  <select id="MySelect" resultType="com.lijia.beans.Country">
+  		select cid,cname
+		from country
+		where cid = #{yyy}
+  </select>
+   <resultMap type="com.lijia.beans.Minister" id="ministerMapper">
+  	<id column="mid" property="mid"/>
+  	<result column="mname" property="mname"/>
+  	<association property="country" javaType="com.lijia.beans.Country" 
+  		select="MySelect"
+  		column="countryId"
+  	/>
+  		
+  </resultMap>
+  
+  <select id="selectMinisterById" resultMap="ministerMapper">
+  	select *
+  	from minister
+  	where mid=#{xxx}
+  </select>
+  
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- ============================IOC========================== -->
+	<!-- 注册数据源：C3P0 -->
+	<bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<!-- 注册属性文件 -->
+	<context:property-placeholder location="classpath:dbconfig.properties"/>
+	
+	<!-- 注入service -->
+	<bean id="buyStockService" class="com.lijia.service.BuyStockServiceImpl">
+		<property name="adao" ref="accountDao"></property>
+		<property name="sdao" ref="stockDao"></property>
+	</bean>
+	
+	<!-- 注册Dao -->
+	<bean id="accountDao" class="com.lijia.dao.AccountDaoImpl">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+	<bean id="stockDao" class="com.lijia.dao.StockDaoImpl">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+	
+	
+<!-- ====================================AOP====================== -->
+	<!-- 事务管理器注册 -->
+	<bean id="myTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+	
+	<!-- 生成事务代理  问题：如果多个目标对象需要配置多个-->
+	<bean id="serviceProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="myTransactionManager"></property>
+		<property name="target" ref="buyStockService"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="open*">ISOLATION_DEFAULT,PROPAGATION_REQUIRED</prop>
+				<!-- 
+					-异常：表示发生指定异常后回滚，这时的异常通常是受查异常
+					+异常：表示发生指定异常后提交，这时的异常通常是运行时异常
+				 -->
+				<prop key="buyStock">ISOLATION_DEFAULT,PROPAGATION_REQUIRED, -BuyStockException</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+</beans>

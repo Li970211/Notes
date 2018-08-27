@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!-- 选择标签按F2查看，?是<=1, *是>=0, ,是顺序  +是>=1 -->
+	<properties resource="dbconfig.properties" />
+	
+	<!-- 起别名 -->
+	<!-- <typeAliases>
+		<typeAlias type="com.lijia.beans.Student" alias="Stu"/>
+		将指定包中所有类的简单类名当作其别名，如Student
+		<package name="com.lijia.beans" />
+	</typeAliases> -->
+	
+	<!-- 配置运行环境 -->
+	<environments default="mysqlEM">
+		<environment id="mysqlEM">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 注册映射文件 -->
+	<mappers>
+		<mapper resource="com/lijia/dao/mapper.xml"/>
+	</mappers>
+</configuration>

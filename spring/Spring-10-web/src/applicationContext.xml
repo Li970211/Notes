@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc 
+		http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+	
+	<!-- spring整合mybatis的目的 :将sqlsessionfactory对象交给spring管理-->
+	
+	<bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis.xml"></property>
+		<property name="dataSource" ref="myc3p0"></property>
+	</bean>
+	
+	
+	<!-- 生成Dao的代理对象  解决这个问题：如果有多个接口就要配置多个
+		注意：这里没有id,但是service哪里要注入，所以拷贝接口名StudentDao赋值，放接口的简单类名
+	-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory"></property>
+		<!-- 当前配置会为指定的基本包中所有的接口生成代理对象 -->
+		<property name="basePackage" value="com.lijia.spring.dao" ></property>
+	</bean>
+	
+	<!-- 注册serice -->
+	<bean id="myStudentService" class="com.lijia.spring.service.StudentServiceImpl">
+	<!-- 
+			这里的Dao的注入需要使用ref属性，
+			若Dao的接口名的前两个字母是大写，则这里的值为接口的简单类名
+			若Dao的接口名的首字母是大写，第二个字母为小写，则这里的值为简单类名，但首字母要小写
+	 -->
+		<property name="dao" ref="studentDao"></property>
+	</bean>
+	
+	<!-- 注册数据源  :c3p0连接池-->
+	<bean id="myc3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	<!-- 注册属性文件 -->
+	<context:property-placeholder location="classpath:dbconfig.properties"/>
+</beans>

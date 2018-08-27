@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 
+Caused by: No qualifying bean of type [com.lijia.spring.di06.School] is defined: 
+expected single matching bean but found 2: mySchool,myPrimarySchool
+
+ -->
+
+	<!-- 
+	autowire="byType"
+	会从容器中查找与实体类的域属性类型具有is-a关系（子类或者实现类）的Bean,
+	并将该Bean对象自动注入给该属性
+	
+	
+	注意这样同源被调用的bean只能有一个，多于一个容器就不知道该匹配哪一个
+	 -->
+	<bean id="myStudent" class="com.lijia.spring.di06.Student" autowire="byType">
+		<property name="name" value="李嘉" />
+		<property name="age" value="21"/>
+	</bean>
+	
+	<bean id="mySchool" class="com.lijia.spring.di06.School">
+		<property name="name" value="华东交通大学"></property>
+	</bean>
+	
+	<bean id="myPrimarySchool" class="com.lijia.spring.di06.PrimarySchool">
+		<property name="name" value="华东交通大学"></property>
+	</bean>
+	
+</beans>

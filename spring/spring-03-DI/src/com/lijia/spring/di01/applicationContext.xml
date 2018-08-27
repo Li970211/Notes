@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="myStudent" class="com.lijia.spring.di01.Student">
+		<property name="name" value="李嘉"></property>
+		<property name="age" value="21"></property>
+		<property name="school" ref="mySchool"></property>
+	</bean>
+	
+	<bean id="mySchool" class="com.lijia.spring.di01.School">
+		<property name="name" value="华东交通大学"></property>
+	</bean>
+</beans>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="myStudent" class="com.lijia.spring.di02.Student">
+	
+		<!-- 
+		第一种
+		<constructor-arg index="0" value="李嘉"></constructor-arg>
+		<constructor-arg index="1" value="21"></constructor-arg>
+		<constructor-arg index="2" ref="mySchool"></constructor-arg>
+		 -->
+		
+		
+		<!-- 第二种
+		<constructor-arg value="李嘉"></constructor-arg>
+		<constructor-arg value="21"></constructor-arg>
+		<constructor-arg ref="mySchool"></constructor-arg>
+		 -->
+		<!-- 第三种，推荐使用 -->
+		<constructor-arg name="name" value="李嘉"></constructor-arg>
+		<constructor-arg name="age" value="21"></constructor-arg>
+		<constructor-arg name="school" ref="mySchool"></constructor-arg>
+		
+	</bean>
+	
+	<bean id="mySchool" class="com.lijia.spring.di02.School" p:name="华东交大">
+		<!-- <property name="name" value="华东交通大学"></property> -->
+	</bean>
+</beans>

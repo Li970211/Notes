@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- autowire="byName"
+		会从容器中查找与实体类的域属性同名的Bean的id ,并将该Bean对象自动注入给该域属性
+		这里即id="school"，与学生的域属性相同
+	 -->
+	<bean id="myStudent" class="com.lijia.spring.di05.Student" autowire="byName">
+		<property name="name" value="李嘉" />
+		<property name="age" value="21"/>
+	</bean>
+	
+	<bean id="school" class="com.lijia.spring.di05.School">
+		<property name="name" value="华东交通大学"></property>
+	</bean>
+	
+	<bean id="address" class="com.lijia.spring.di05.Address" p:add="江西">
+		<!-- <property name="add" value="萍乡"></property> -->
+	</bean>
+</beans>

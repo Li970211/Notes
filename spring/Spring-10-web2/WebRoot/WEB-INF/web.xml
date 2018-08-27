@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    
+    <!-- 指定Spring配置文件的位置及名称 -->
+    <context-param>
+    	<param-name>contextConfigLocation</param-name>
+    	<param-value>classpath:spring.xml</param-value>
+    </context-param>
+    
+    <!-- 注册ServletContext监听器
+    	完成两件工作:
+    		1.在ServletContext被创建时，创建Spring容器对象
+    		2.将创建好的Spring容器对象放入到ServletContext的域属性空间
+     -->
+    <listener>
+    	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    
+    <!-- 以上两个配置在spring在web项目中一定要配置 -->
+    
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>com.lijia.servlet.RegisterServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/RegisterServlet</url-pattern>
+  </servlet-mapping>
+</web-app>

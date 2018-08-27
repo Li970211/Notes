@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<!-- 这个包下的所有实体类都起别名，别名是类名 -->
+		<package name="com.lijia.bean"/>
+	</typeAliases>
+	
+	<!-- 注册映射文件 -->
+	<mappers>
+		<!-- 这个包下的配置文件要与dao同名 -->
+		<package name="com.lijia.spring.dao"/>
+	</mappers>
+</configuration>

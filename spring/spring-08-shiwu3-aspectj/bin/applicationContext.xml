@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- ============================IOC========================== -->
+	<!-- 注册数据源：C3P0 -->
+	<bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<!-- 注册属性文件 -->
+	<context:property-placeholder location="classpath:dbconfig.properties"/>
+	
+	<!-- 注入service -->
+	<bean id="buyStockService" class="com.lijia.service.BuyStockServiceImpl">
+		<property name="adao" ref="accountDao"></property>
+		<property name="sdao" ref="stockDao"></property>
+	</bean>
+	
+	<!-- 注册Dao -->
+	<bean id="accountDao" class="com.lijia.dao.AccountDaoImpl">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+	<bean id="stockDao" class="com.lijia.dao.StockDaoImpl">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+	
+	
+<!-- ====================================AOP====================== -->
+	<!-- 事务管理器注册 -->
+	<bean id="myTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="myDataSource"></property>
+	</bean>
+	
+	<!-- 注册事务通知 -->
+	<tx:advice id="txAdvice" transaction-manager="myTransactionManager">
+		<tx:attributes>
+			<!-- 这里指定的是为每一个 ***连接点***指定所要应用的事务属性 -->
+			<tx:method name="open*" isolation="DEFAULT" propagation="REQUIRED"/>
+			<tx:method name="buyStock" isolation="DEFAULT" propagation="REQUIRED" rollback-for="BuyStockException"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- AOP配置 -->
+	<aop:config>
+		<!-- 这里指定是***切入点*** -->
+		<aop:pointcut expression="execution(* *..service.*.*(..))" id="myPonitcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPonitcut"/>
+		
+	</aop:config>
+	
+	
+</beans>

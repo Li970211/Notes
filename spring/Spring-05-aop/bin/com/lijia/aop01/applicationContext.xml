@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 注册目标对象 -->
+    <bean id="someService" class="com.lijia.aop01.SomeServiceImpl"/>
+    
+    <!-- 注册切面：通知 -->
+    <bean id="myAdvice" class="com.lijia.aop01.MyMethodBeforeAdvice"/>
+    
+    <!-- 生成代理对象 -->
+    <bean id="serviceProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+    	<!-- <property name="targetName" value="someService"/> -->
+    	<!-- 指定目标对象 -->
+    	<property name="target" ref="someService"/>
+    	<!-- 指定切面  name是String 类型注意后面是value-->
+    	<property name="interceptorNames" value="myAdvice"/>
+    	
+    </bean>
+
+</beans>

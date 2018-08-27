@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lijia.dao.IStudentDao">
+	<!-- parameterType可以省略 -->
+  	<insert id="insertStudent" parameterType="com.lijia.beans.Student">
+  		insert into student(name,age,score) values(#{name},#{age},#{score})
+  	</insert>
+  	
+  	
+  	<!-- void insertStudnetCacheId(Student student); -->
+  	<insert id="insertStudnetCacheId" parameterType="com.lijia.beans.Student">
+  		insert into student(name,age,score) values(#{name},#{age},#{score})
+  		<!-- 插入后查询id 
+  		order属性指定查询主键的sql和insert语句的执行顺序
+  		在这可以不写-->
+  		<selectKey resultType="int" keyProperty="id"  order="AFTER">
+  			select @@identity
+  			<!-- select LAST_INSERT_ID() -->
+  		</selectKey>
+  	</insert>
+  	
+  	<!-- void deleteStudentById(int id); -->
+  	<delete id="deleteStudentById" parameterType="com.lijia.beans.Student">
+  		delete from student where id = #{id}
+  	</delete>
+  	
+  	
+  	<!-- void updateStudent(Student student); -->
+  	<update id="updateStudent">
+  		update student
+  		set name=#{name},age=#{age},score=#{score}
+  		where id=#{id}
+  	</update>
+  	
+  	<!-- List<Student> selectAllStudents(); 
+  	查询 必须写resultType或者resultMap
+  	-->
+  	<select id="selectAllStudents" resultType="com.lijia.beans.Student">
+  		select * from student
+  	</select>
+  	
+  	<!-- Student selectStudentById(int id); -->
+  	<select id="selectStudentById" resultType="com.lijia.beans.Student">
+  		select * from student where id = #{id}
+  	</select>
+  	
+  	<!-- List<Student> selectStudentsByName(String name); -->
+  	<select id="selectStudentsByName" resultType="com.lijia.beans.Student">
+  		<!-- select * from student where name like '%${value}%' 字符串拼接，这里面只能写value,了解-->
+  		select * from student where name like '%' #{name} '%'<!-- 动态的，掌握 -->
+  	</select>
+  	
+  	
+  	<!-- Student selectStudentByMap(Map<String, Object> map); -->
+  	 <select id="selectStudentByMap" resultType="com.lijia.beans.Student">
+  		select * from student where id = #{studentId}
+  	</select>
+  	
+</mapper>

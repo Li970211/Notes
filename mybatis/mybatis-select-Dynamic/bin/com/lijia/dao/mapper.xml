@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lijia.dao.IStudentDao">
+	
+  	<!-- List<Student> selectStudentsByCondition(Map<String, Object> map); -->
+  	<select id="selectStudentsByCondition" resultType="com.lijia.beans.Student">
+  	<!-- 多条件查询可以放在map集合中，值放map的key -->
+  		select * from student 
+  		where name like '%' #{stuName} '%'
+  		and age > #{stuAge}
+  		and score > #{stu.score}
+  	</select>
+  	
+  	<!-- List<Student> selectStudentsByCond(String name, int age); -->
+  	<select id="selectStudentsByCond" resultType="com.lijia.beans.Student">
+  		select * from student
+  		<!-- where name like '%' #{param1} '%' and age > #{param2} -->
+  		where name like '%' #{0} '%' and age > #{1}
+  	</select>
+ <!-- 
+ 	#{}中可以放什么内容
+ 	1.参数对象的属性
+ 	2.随意内容，此时的#{}是给占位符
+ 	3.参数为map时的key
+ 	4.参数为map时，若key所对应的value为对象，则可将该对象的属性放入
+ 	5.参数的索引号，0===>param1  1===>param2
+  -->
+  	<!-- 动态sql============================================================== -->
+  	<!-- List<Student> selectStudentIf(String name, int age); -->
+  	<select id = "selectStudentIf" resultType="com.lijia.beans.Student">
+  		select * from student
+  		<where>
+  			<if test="name != null and name != '' ">
+  				<!-- 注意'%' #{name} '%' 中#{name}两边要有给空格-->
+  				and name like '%' #{name} '%'
+  			</if>
+  			<if test="age > 0">
+  				and age > #{age}
+  			</if>
+  		</where>
+  	</select>
+  	
+  	
+  	<!-- List<Student> selectStudentChoose(Student student); -->
+  	<select id="selectStudentChoose" resultType="com.lijia.beans.Student">
+  		select * from student
+  		<where>
+  			<choose>
+  				<when test="name != null and name != '' ">
+  					name like '%' #{name} '%'
+  				</when>
+  				<when test="age > 0">
+  					 age > #{age}
+  				</when>
+  				<otherwise>
+  					1 = 1
+  				</otherwise>
+  			</choose>
+  		</where>
+  	</select>
+  	
+  	
+  	<!-- List<Student> selectStudentForeach(int[] ids); -->
+  	<select id="selectStudentForeach" resultType="com.lijia.beans.Student">
+  		<!-- select * from student where id in (1,3,5,7) -->
+  		select * from student
+  		<if test="array.length>0">
+  			<where>
+  				<foreach collection="array" item="myId" open="id in (" close=")" separator=",">
+  					#{myId}
+  				</foreach>
+  			</where>
+  		</if>
+  	</select>
+  	
+  	<!-- List<Student> selectStudentForeachList(List<Integer> ids); -->
+  	<select id="selectStudentForeachList" resultType="com.lijia.beans.Student">
+  		select * from student
+  		<if test="list != null and list.size()>0">
+  			<where>
+  				<foreach collection="list" item="myId" open="id in (" close=")" separator=",">
+  					#{myId}
+  				</foreach>
+  			</where>
+  		</if>
+  	</select>
+  	
+  	<!-- List<Student> selectStudentForeachList2(List<Student> student); -->
+  	<select id="selectStudentForeachList2" resultType="com.lijia.beans.Student">
+  		<!-- select * from student -->
+  		<include refid="selectColumns"></include>
+  		<if test="list != null and list.size()>0">
+  			<where>
+  				<foreach collection="list" item="stu" open="id in (" close=")" separator=",">
+  					#{stu.id}
+  				</foreach>
+  			</where>
+  		</if>
+  	</select>
+  	
+  	
+  	<!-- sql片段 -->
+  	<sql id="selectColumns">
+  		select * from student
+  	</sql>
+</mapper>

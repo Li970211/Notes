@@ -45,7 +45,7 @@
   	
   	<!-- List<Student> selectStudentsByName(String name); -->
   	<select id="selectStudentsByName" resultType="com.lijia.beans.Student">
-  		<!-- select * from student where name like '%${value}%' 字符串拼接，这里面只能写value,了解-->
+  		<!-- select * from student where name like '%${value}%' 字符串拼接，这里面只能写value-->
   		select * from student where name like '%' #{name} '%'<!-- 动态的，掌握 -->
   	</select>
   	
